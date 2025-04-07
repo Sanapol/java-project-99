@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    database: 'database_aagr'
+    db-port: '5432'
+    host: 'dpg-cv94vnlumphs73fkreag-a'
+    username: "database_aagr_user"
+    password: "875uQvJva6lxnxNMJf9LYmaeV3tavD1K"
+    jdbc_database_url: 'jdbc:postgresql://dpg-cv94vnlumphs73fkreag-a:5432/database_aagr?password=875uQvJva6lxnxNMJf9LYmaeV3tavD1K&user=database_aagr_user'
