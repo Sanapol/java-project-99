@@ -2,9 +2,7 @@ name: Test coverage
 
 on:
   - push
-    - branch: [main]
   - pull_request
-    - branch: [main]
 
 jobs:
   build:
@@ -22,7 +20,11 @@ jobs:
       - run: cd app
       - run: make lint
       - run: make test
-      - uses: qltysh/qlty-action/coverage@main
-        with:
+      - name: Publish code coverage
+        uses: paambaati/codeclimate-action@v9.0.0
+        env:
           coverage-token: {{secrets.QLTY_COVERAGE_TOKEN}}
-          files: reports/coverage.xml
+          JACOCO_SOURCE_PATH: ${{github.workspace}}/app/src/main/java
+        with:
+          coverageCommand: make report
+          coverageLocations: ${{github.workspace}}/app/build/reports/jacoco/test/jacocoTestReport.xml:jacoco
