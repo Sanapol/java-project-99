@@ -48,7 +48,7 @@ public class TestApplication {
     private User user;
 
     @BeforeEach
-    public void startUp() {
+    public final void startUp() {
         user = Instancio.of(User.class)
                 .ignore(Select.field(User::getId))
                 .ignore(Select.field(User::getCreatedAt))
@@ -59,7 +59,7 @@ public class TestApplication {
     }
 
     @AfterEach
-    public void after() {
+    public final void after() {
         userRepository.deleteAll();
     }
 
