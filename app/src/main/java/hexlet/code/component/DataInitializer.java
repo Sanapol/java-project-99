@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class DataInitializer implements ApplicationRunner {
+public final class DataInitializer implements ApplicationRunner {
 
     @Autowired
     private UserRepository userRepository;
