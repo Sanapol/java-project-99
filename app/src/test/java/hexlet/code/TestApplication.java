@@ -5,10 +5,8 @@ import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
 import net.datafaker.Faker;
 import org.instancio.Instancio;
-import org.instancio.InstancioApi;
 import org.instancio.Select;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +48,7 @@ public class TestApplication {
     private User user;
 
     @BeforeEach
-    public void startUp() {
+    public final void startUp() {
         user = Instancio.of(User.class)
                 .ignore(Select.field(User::getId))
                 .ignore(Select.field(User::getCreatedAt))
@@ -61,7 +59,7 @@ public class TestApplication {
     }
 
     @AfterEach
-    public void after() {
+    public final void after() {
         userRepository.deleteAll();
     }
 
