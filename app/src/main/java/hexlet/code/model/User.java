@@ -23,7 +23,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Table(name = "users")
 @Setter
 @Getter
-public class User extends BaseEntity {
+public class User implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
