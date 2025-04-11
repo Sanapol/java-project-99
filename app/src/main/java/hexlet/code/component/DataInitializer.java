@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public final class DataInitializer implements ApplicationRunner {
+public class DataInitializer implements ApplicationRunner {
 
     @Autowired
     private UserRepository userRepository;
 
     @Override
-    public void run(ApplicationArguments args) {
+    public final void run(ApplicationArguments args) {
         String email = "hexlet@example.com";
         String password = "qwerty";
         String firstName = "admin";

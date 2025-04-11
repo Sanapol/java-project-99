@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 @Configuration
-public final class JacksonConfig {
+public class JacksonConfig {
     @Bean
-    Jackson2ObjectMapperBuilder objectMapperBuilder() {
+    public static Jackson2ObjectMapperBuilder objectMapperBuilder() {
         var builder = new Jackson2ObjectMapperBuilder();
         builder.serializationInclusion(JsonInclude.Include.NON_NULL)
                 .modulesToInstall(new JsonNullableModule());
