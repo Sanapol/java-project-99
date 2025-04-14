@@ -13,8 +13,12 @@ import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -23,7 +27,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Table(name = "users")
 @Setter
 @Getter
-public class User implements BaseEntity {
+public class User implements BaseEntity, UserDetails {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -47,4 +51,34 @@ public class User implements BaseEntity {
 
     @UpdateTimestamp
     private LocalDate updatedAt;
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new ArrayList<GrantedAuthority>();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 }

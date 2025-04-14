@@ -22,6 +22,7 @@ import java.util.Map;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -65,7 +66,7 @@ public class TestApplication {
 
     @Test
     public void testWelcome() throws Exception {
-        MvcResult result = mockWvc.perform(get("/welcome"))
+        MvcResult result = mockWvc.perform(get("/welcome").with(jwt()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -75,7 +76,7 @@ public class TestApplication {
 
     @Test
     public void testIndex() throws Exception {
-        MvcResult result = mockWvc.perform(get("/api/users"))
+        MvcResult result = mockWvc.perform(get("/api/users").with(jwt()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -86,7 +87,7 @@ public class TestApplication {
     @Test
     public void testShow() throws Exception {
 
-        MvcResult result = mockWvc.perform(get("/api/users/" + user.getId()))
+        MvcResult result = mockWvc.perform(get("/api/users/" + user.getId()).with(jwt()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -104,7 +105,7 @@ public class TestApplication {
         data.put("lastName", "Wang");
 
         MvcResult result = mockWvc.perform(post("/api/users")
-                        .contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsString(data)))
+                        .contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsString(data)).with(jwt()))
                 .andExpect(status().isCreated())
                 .andReturn();
 
@@ -124,7 +125,7 @@ public class TestApplication {
         data.put("email", "email@list.com");
 
         MvcResult result = mockWvc.perform(put("/api/users/" + user.getId())
-                        .contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsString(data)))
+                        .contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsString(data)).with(jwt()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -134,7 +135,7 @@ public class TestApplication {
 
     @Test
     public void testDelete() throws Exception {
-        ResultActions result = mockWvc.perform(delete("/api/users/" + user.getId()))
+        ResultActions result = mockWvc.perform(delete("/api/users/" + user.getId()).with(jwt()))
                 .andExpect(status().isNoContent());
 
         assertThat(userRepository.existsById(user.getId())).isFalse();
