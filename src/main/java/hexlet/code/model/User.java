@@ -58,6 +58,11 @@ public class User implements BaseEntity, UserDetails {
     }
 
     @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
     public boolean isEnabled() {
         return true;
     }
