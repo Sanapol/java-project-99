@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class TestApplication {
+public class TestUser {
 
     @Autowired
     private UserRepository userRepository;
