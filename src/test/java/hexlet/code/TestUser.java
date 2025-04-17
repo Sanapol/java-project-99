@@ -60,7 +60,7 @@ public class TestUser {
     }
 
     @AfterEach
-    public void after() {
+    public void clearAfter() {
         userRepository.deleteAll();
     }
 
