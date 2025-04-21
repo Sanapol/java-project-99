@@ -49,7 +49,7 @@ public class TestUser {
     private User user;
 
     @BeforeEach
-    public void startUp() {
+    public void repositoryPrepare() {
         user = Instancio.of(User.class)
                 .ignore(Select.field(User::getId))
                 .ignore(Select.field(User::getCreatedAt))

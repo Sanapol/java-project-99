@@ -1,10 +1,8 @@
 package hexlet.code;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hexlet.code.mapper.TaskStatusMapper;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.repository.TaskStatusRepository;
-import net.datafaker.Faker;
 import org.instancio.Instancio;
 import org.instancio.Select;
 import org.junit.jupiter.api.AfterEach;
@@ -37,13 +35,7 @@ public class TestTaskStatus {
     private MockMvc mockMvc;
 
     @Autowired
-    private Faker faker;
-
-    @Autowired
     private TaskStatusRepository taskStatusRepository;
-
-    @Autowired
-    private TaskStatusMapper taskStatusMapper;
 
     @Autowired
     private ObjectMapper om;
@@ -51,7 +43,7 @@ public class TestTaskStatus {
     private TaskStatus taskStatus;
 
     @BeforeEach
-    public void startUp() {
+    public void repositoryPrepare() {
         taskStatus = Instancio.of(TaskStatus.class)
                 .ignore(Select.field(TaskStatus::getId))
                 .ignore(Select.field((TaskStatus::getCreatedAt)))
