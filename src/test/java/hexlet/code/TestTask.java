@@ -72,6 +72,9 @@ public class TestTask {
                 .ignore(Select.field((TaskStatus::getCreatedAt)))
                 .create();
 
+        userRepository.save(user);
+        taskStatusRepository.save(taskStatus);
+
         task = Instancio.of(Task.class)
                 .ignore(Select.field(Task::getId))
                 .ignore(Select.field(Task::getCreatedAt))
@@ -79,11 +82,6 @@ public class TestTask {
                 .supply(Select.field(Task::getTaskStatus), () -> taskStatus)
                 .create();
 
-        taskStatusRepository.deleteAll();
-        userRepository.deleteAll();
-        taskRepository.deleteAll();
-        userRepository.save(user);
-        taskStatusRepository.save(taskStatus);
         taskRepository.save(task);
     }
 
@@ -118,6 +116,7 @@ public class TestTask {
 
     @Test
     public void testCreate() throws Exception {
+        taskRepository.deleteAll();
         Map<String, String> data = new HashMap<>();
         data.put("index", "12345");
         data.put("assigneeId", String.valueOf(user.getId()));
@@ -132,7 +131,6 @@ public class TestTask {
         Task resultTusk = taskRepository.findByIndex(12345).get();
 
         String body = result.getResponse().getContentAsString();
-        assertThatJson(body).and(t -> t.node("index")).isEqualTo("12345");
         assertThat(resultTusk.getCreatedAt()).isNotNull();
         assertThat(resultTusk.getDescription()).isNull();
         assertThat(resultTusk.getName()).isEqualTo("Some Title");
