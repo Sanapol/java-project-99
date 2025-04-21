@@ -131,6 +131,7 @@ public class TestTask {
         Task resultTusk = taskRepository.findByIndex(12345).get();
 
         String body = result.getResponse().getContentAsString();
+        assertThatJson(body).and(t -> t.node("index").isEqualTo("12345"));
         assertThat(resultTusk.getCreatedAt()).isNotNull();
         assertThat(resultTusk.getDescription()).isNull();
         assertThat(resultTusk.getName()).isEqualTo("Some Title");
