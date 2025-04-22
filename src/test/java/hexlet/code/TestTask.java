@@ -128,12 +128,38 @@ public class TestTask {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        Task resultTusk = taskRepository.findByIndex(12345).get();
+        Task resultTusk = taskRepository.findByName("Some Title").get();
 
         String body = result.getResponse().getContentAsString();
         assertThatJson(body).and(t -> t.node("index").isEqualTo("12345"));
         assertThat(resultTusk.getCreatedAt()).isNotNull();
         assertThat(resultTusk.getDescription()).isNull();
         assertThat(resultTusk.getName()).isEqualTo("Some Title");
+    }
+
+    @Test
+    public void updateTest() throws Exception {
+        Map<String, String> data = new HashMap<>();
+        data.put("title", "New title");
+        data.put("content", "New content");
+
+        MvcResult result = mockMvc.perform(put("/api/tasks/" + task.getId()).with(jwt())
+                .contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsString(data)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String body = result.getResponse().getContentAsString();
+        assertThatJson(body).and(t -> t.node("title").isEqualTo("New title"));
+        assertThatJson(body).and(t -> t.node("content").isEqualTo("New content"));
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+
+        MvcResult result = mockMvc.perform(delete("/api/tasks/" + task.getId()).with(jwt()))
+                .andExpect(status().isNoContent())
+                .andReturn();
+
+        assertThat(taskRepository.existsById(task.getId())).isFalse();
     }
 }
