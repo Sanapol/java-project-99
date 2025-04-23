@@ -1,6 +1,7 @@
 package hexlet.code;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hexlet.code.model.Label;
 import hexlet.code.model.Task;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.model.User;
@@ -55,6 +56,7 @@ public class TestTask {
     private MockMvc mockMvc;
 
     private Task task;
+    private Label label;
     private User user;
     private TaskStatus taskStatus;
 
@@ -78,6 +80,7 @@ public class TestTask {
         task = Instancio.of(Task.class)
                 .ignore(Select.field(Task::getId))
                 .ignore(Select.field(Task::getCreatedAt))
+                .ignore(Select.field(Task::getLabels))
                 .supply(Select.field(Task::getAssignee), () -> user)
                 .supply(Select.field(Task::getTaskStatus), () -> taskStatus)
                 .create();
