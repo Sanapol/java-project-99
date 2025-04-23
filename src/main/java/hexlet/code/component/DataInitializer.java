@@ -2,8 +2,10 @@ package hexlet.code.component;
 
 import hexlet.code.dto.userDto.UserCreateDto;
 import hexlet.code.mapper.UserMapper;
+import hexlet.code.model.Label;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.model.User;
+import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -25,20 +27,14 @@ public class DataInitializer implements ApplicationRunner {
     @Autowired
     private TaskStatusRepository taskStatusRepository;
 
+    @Autowired
+    private LabelRepository labelRepository;
+
     @Override
     public void run(ApplicationArguments args) {
-        String email = "hexlet@example.com";
-        String password = "qwerty";
-        String firstName = "admin";
-        String lastName = "admin";
-        UserCreateDto userData = new UserCreateDto();
-        userData.setEmail(email);
-        userData.setPassword(password);
-        userData.setFirstName(firstName);
-        userData.setLastName(lastName);
-        User user = userMapper.map(userData);
-        userRepository.save(user);
+        createAdmin();
         createTaskStatus();
+        createLabel();
     }
 
     private void createTaskStatus() {
@@ -77,5 +73,31 @@ public class DataInitializer implements ApplicationRunner {
         statusPublished.setName(published);
         statusPublished.setSlug(publishedSlug);
         taskStatusRepository.save(statusPublished);
+    }
+
+    private void createAdmin() {
+        String email = "hexlet@example.com";
+        String password = "qwerty";
+        String firstName = "admin";
+        String lastName = "admin";
+        UserCreateDto userData = new UserCreateDto();
+        userData.setEmail(email);
+        userData.setPassword(password);
+        userData.setFirstName(firstName);
+        userData.setLastName(lastName);
+        User user = userMapper.map(userData);
+        userRepository.save(user);
+    }
+
+    private void createLabel() {
+        String feature = "feature";
+        Label featureLabel = new Label();
+        featureLabel.setName(feature);
+        labelRepository.save(featureLabel);
+
+        String bug = "bug";
+        Label bugLabel = new Label();
+        bugLabel.setName(bug);
+        labelRepository.save(bugLabel);
     }
 }

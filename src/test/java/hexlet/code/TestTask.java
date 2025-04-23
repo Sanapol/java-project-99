@@ -5,6 +5,7 @@ import hexlet.code.model.Label;
 import hexlet.code.model.Task;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.model.User;
+import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
@@ -21,7 +22,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
@@ -45,6 +48,9 @@ public class TestTask {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private LabelRepository labelRepository;
 
     @Autowired
     private Faker faker;
@@ -74,13 +80,23 @@ public class TestTask {
                 .ignore(Select.field((TaskStatus::getCreatedAt)))
                 .create();
 
+        label = Instancio.of(Label.class)
+                .ignore(Select.field(Label::getId))
+                .ignore(Select.field(Label::getCreatedAt))
+                .ignore(Select.field(Label::getTasks))
+                .create();
+
+        labelRepository.save(label);
         userRepository.save(user);
         taskStatusRepository.save(taskStatus);
+
+        List<Label> labels = new ArrayList<>();
+        labels.add(label);
 
         task = Instancio.of(Task.class)
                 .ignore(Select.field(Task::getId))
                 .ignore(Select.field(Task::getCreatedAt))
-                .ignore(Select.field(Task::getLabels))
+                .supply(Select.field(Task::getLabels), () -> labels)
                 .supply(Select.field(Task::getAssignee), () -> user)
                 .supply(Select.field(Task::getTaskStatus), () -> taskStatus)
                 .create();
