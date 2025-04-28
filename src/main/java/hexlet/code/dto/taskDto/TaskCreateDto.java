@@ -11,11 +11,11 @@ import java.util.List;
 @Getter
 public class TaskCreateDto {
     private int index;
-    private long assigneeId;
+    private long assignee_id;
     @NotBlank
     private String title;
     private String content;
     @NotBlank
     private String status;
-    private List<String> labels;
+    private List<Long> taskLabelIds;
 }

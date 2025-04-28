@@ -7,6 +7,7 @@ import hexlet.code.exeption.ResourceNotFoundException;
 import hexlet.code.mapper.TaskStatusMapper;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.repository.TaskStatusRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -50,7 +51,7 @@ public class TaskStatusController {
 
     @PostMapping(path = "")
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskStatusDto create(@RequestBody TaskStatusCreateDto data) {
+    public TaskStatusDto create(@Valid @RequestBody TaskStatusCreateDto data) {
         TaskStatus taskStatus = taskStatusMapper.map(data);
         taskStatusRepository.save(taskStatus);
         return taskStatusMapper.map(taskStatus);
@@ -58,7 +59,7 @@ public class TaskStatusController {
 
     @PutMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TaskStatusDto update(@PathVariable long id, @RequestBody TaskStatusUpdateDto data) {
+    public TaskStatusDto update(@PathVariable long id, @Valid @RequestBody TaskStatusUpdateDto data) {
         TaskStatus taskStatus = taskStatusRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Task Status with id " + id + " not found"));
         taskStatusMapper.update(data, taskStatus);

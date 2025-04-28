@@ -37,8 +37,8 @@ public abstract class ReferenceMapper {
                 new ResourceNotFoundException("slug not found")) : null;
     }
 
-    public List<Label> toEntity(List<String> names) {
-        return names != null ? names.stream().map(name -> labelRepository.findByName(name).orElseThrow(() ->
-                new ResourceNotFoundException("label with name " + name + " not found"))).toList() : null;
+    public List<Label> toEntity(List<Long> ids) {
+        return ids != null ? ids.stream().map(id -> labelRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("label with name " + id + " not found"))).toList() : null;
     }
 }

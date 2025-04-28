@@ -2,12 +2,16 @@ package hexlet.code.controller;
 
 import hexlet.code.dto.taskDto.TaskCreateDto;
 import hexlet.code.dto.taskDto.TaskDto;
+import hexlet.code.dto.taskDto.TaskParamsDto;
 import hexlet.code.dto.taskDto.TaskUpdateDto;
 import hexlet.code.exeption.ResourceNotFoundException;
 import hexlet.code.mapper.TaskMapper;
 import hexlet.code.model.Task;
 import hexlet.code.repository.TaskRepository;
+import hexlet.code.specification.TaskSpecification;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,10 +37,14 @@ public class TaskController {
     @Autowired
     private TaskMapper taskMapper;
 
+    @Autowired
+    private TaskSpecification taskSpecification;
+
     @GetMapping(path = "")
     @ResponseStatus(HttpStatus.OK)
-    public List<TaskDto> index() {
-        List<Task> tasks = taskRepository.findAll();
+    public List<TaskDto> index(TaskParamsDto data) {
+        Specification<Task> spec = taskSpecification.build(data);
+        List<Task> tasks = taskRepository.findAll(spec);
         return tasks.stream().map(taskMapper::map).toList();
     }
 
@@ -50,7 +58,7 @@ public class TaskController {
 
     @PostMapping(path = "")
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskDto create(@RequestBody TaskCreateDto data) {
+    public TaskDto create(@Valid @RequestBody TaskCreateDto data) {
         Task task = taskMapper.map(data);
         taskRepository.save(task);
         return taskMapper.map(task);
@@ -58,7 +66,7 @@ public class TaskController {
 
     @PutMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TaskDto update(@PathVariable long id, @RequestBody TaskUpdateDto data) {
+    public TaskDto update(@PathVariable long id, @Valid @RequestBody TaskUpdateDto data) {
         Task task = taskRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("task with id " + " not found"));
         taskMapper.update(data, task);

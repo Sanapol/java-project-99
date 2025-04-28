@@ -7,6 +7,7 @@ import hexlet.code.exeption.ResourceNotFoundException;
 import hexlet.code.mapper.UserMapper;
 import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -50,7 +51,7 @@ public final class UserController {
 
     @PostMapping(path = "")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto create(@RequestBody UserCreateDto dto) {
+    public UserDto create(@Valid @RequestBody UserCreateDto dto) {
         User user = userMapper.map(dto);
         userRepository.save(user);
         return userMapper.map(user);
@@ -58,7 +59,7 @@ public final class UserController {
 
     @PutMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto update(@PathVariable long id, @RequestBody UserUpdateDto dto) {
+    public UserDto update(@PathVariable long id, @Valid @RequestBody UserUpdateDto dto) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("user with id " + id + " not found"));
         userMapper.update(dto, user);

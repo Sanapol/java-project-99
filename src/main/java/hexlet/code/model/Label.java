@@ -37,6 +37,6 @@ public class Label {
     @CreatedDate
     private LocalDate createdAt;
 
-    @ManyToMany(mappedBy = "labels")
+    @ManyToMany(mappedBy = "taskLabel")
     private List<Task> tasks;
 }
