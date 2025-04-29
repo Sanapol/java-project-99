@@ -5,17 +5,19 @@ import hexlet.code.model.Task;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class TaskSpecification {
 
     public Specification<Task> build(TaskParamsDto data) {
-        return titleCount(data.getTitleCount()).and(assigneeId(data.getAssigneeId()))
+        return titleCont(data.getTitleCont()).and(assigneeId(data.getAssigneeId()))
                 .and(status(data.getStatus())).and(labelId(data.getLabelId()));
     }
 
-    private Specification<Task> titleCount(String title) {
+    private Specification<Task> titleCont(String title) {
         return ((root, query, cb) -> title == null ? cb.conjunction()
-                : cb.like(root.get("name"), title.toLowerCase()));
+                : cb.like(root.get("name"), title));
     }
 
     private Specification<Task> assigneeId(Long id) {
