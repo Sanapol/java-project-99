@@ -96,7 +96,7 @@ public class TestTask {
         task = Instancio.of(Task.class)
                 .ignore(Select.field(Task::getId))
                 .ignore(Select.field(Task::getCreatedAt))
-                .supply(Select.field(Task::getLabels), () -> labels)
+                .supply(Select.field(Task::getTaskLabel), () -> labels)
                 .supply(Select.field(Task::getAssignee), () -> user)
                 .supply(Select.field(Task::getTaskStatus), () -> taskStatus)
                 .create();
@@ -130,7 +130,7 @@ public class TestTask {
         String body = result.getResponse().getContentAsString();
         assertThatJson(body).and(t -> t.node("index").isEqualTo(task.getIndex()),
                 t -> t.node("status").isEqualTo(taskStatus.getSlug()),
-                t -> t.node("assigneeId").isEqualTo(user.getId()));
+                t -> t.node("assignee_id").isEqualTo(user.getId()));
     }
 
     @Test
@@ -138,7 +138,7 @@ public class TestTask {
         taskRepository.deleteAll();
         Map<String, String> data = new HashMap<>();
         data.put("index", "12345");
-        data.put("assigneeId", String.valueOf(user.getId()));
+        data.put("assignee_id", String.valueOf(user.getId()));
         data.put("title", "Some Title");
         data.put("status", taskStatus.getSlug());
 

@@ -23,20 +23,20 @@ import java.util.List;
 )
 public abstract class TaskMapper {
     @Mapping(source = "status", target = "taskStatus")
-    @Mapping(source = "assignee_id", target = "assignee")
+    @Mapping(source = "assigneeId", target = "assignee.id")
     @Mapping(source = "title", target = "name")
     @Mapping(source = "content", target = "description")
     @Mapping(source = "taskLabelIds", target = "taskLabel")
     public abstract Task map(TaskCreateDto data);
 
-    @Mapping(source = "assignee.id", target = "assignee_id")
+    @Mapping(source = "assignee.id", target = "assigneeId")
     @Mapping(source = "name", target = "title")
     @Mapping(source = "description", target = "content")
     @Mapping(source = "taskStatus.slug", target = "status")
     @Mapping(source = "taskLabel", target = "taskLabelIds", qualifiedByName = "mapTaskLabel")
     public abstract TaskDto map(Task task);
 
-    @Mapping(source = "assignee_id", target = "assignee")
+    @Mapping(source = "assigneeId", target = "assignee.id")
     @Mapping(source = "status", target = "taskStatus")
     @Mapping(source = "title", target = "name")
     @Mapping(source = "content", target = "description")
@@ -45,6 +45,6 @@ public abstract class TaskMapper {
 
     @Named("mapTaskLabel")
     List<Long> mapTaskLabel(List<Label> labels) {
-        return labels.stream().map(Label::getId).toList();
+        return labels == null ? null : labels.stream().map(Label::getId).toList();
     }
 }

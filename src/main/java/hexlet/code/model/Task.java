@@ -1,6 +1,5 @@
 package hexlet.code.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -35,7 +34,6 @@ public class Task {
 
     @NotBlank
     @Size(min = 1)
-    @Column(unique = true)
     private String name;
 
     private int index;

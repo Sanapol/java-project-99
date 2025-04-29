@@ -5,8 +5,6 @@ import hexlet.code.model.Task;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import java.util.Locale;
-
 @Component
 public class TaskSpecification {
 
@@ -16,22 +14,22 @@ public class TaskSpecification {
     }
 
     private Specification<Task> titleCount(String title) {
-        return ((root, query, cb) -> title == null? cb.conjunction() :
-                cb.like(root.get("name"), title.toLowerCase()));
+        return ((root, query, cb) -> title == null ? cb.conjunction()
+                : cb.like(root.get("name"), title.toLowerCase()));
     }
 
     private Specification<Task> assigneeId(Long id) {
-        return ((root, query, cb) -> id == null? cb.conjunction() :
-                cb.equal(root.get("assignee").get("id"), id));
+        return ((root, query, cb) -> id == null ? cb.conjunction()
+                : cb.equal(root.get("assignee").get("id"), id));
     }
 
     private Specification<Task> status(String status) {
-        return (root, query, cb) -> status == null? cb.conjunction() :
-                cb.equal(root.get("taskStatus").get("slug"), status);
+        return (root, query, cb) -> status == null ? cb.conjunction()
+                : cb.equal(root.get("taskStatus").get("slug"), status);
     }
 
     private Specification<Task> labelId(Long id) {
-        return ((root, query, cb) -> id == null? cb.conjunction() :
-                cb.equal(root.get("labels").get("id"), id));
+        return ((root, query, cb) -> id == null ? cb.conjunction()
+                : cb.equal(root.get("labels").get("id"), id));
     }
 }
