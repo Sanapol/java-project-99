@@ -15,7 +15,7 @@ public class TaskSpecification {
 
     private Specification<Task> titleCont(String title) {
         return ((root, query, cb) -> title == null ? cb.conjunction()
-                : cb.like(root.get("name"), title));
+                : cb.like(cb.lower(root.get("name")), "%" + title.toLowerCase() + "%"));
     }
 
     private Specification<Task> assigneeId(Long id) {
@@ -30,6 +30,6 @@ public class TaskSpecification {
 
     private Specification<Task> labelId(Long id) {
         return ((root, query, cb) -> id == null ? cb.conjunction()
-                : cb.equal(root.get("labels").get("id"), id));
+                : cb.equal(root.get("taskLabel").get("id"), id));
     }
 }
