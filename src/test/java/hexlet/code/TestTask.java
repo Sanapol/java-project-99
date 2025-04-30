@@ -65,6 +65,8 @@ public class TestTask {
     private Label label;
     private User user;
     private TaskStatus taskStatus;
+    private TaskStatus taskStatusForFilter;
+    private Task taskFilter;
 
     @BeforeEach
     public void repositoryPrepare() {
@@ -76,6 +78,11 @@ public class TestTask {
                 .create();
 
         taskStatus = Instancio.of(TaskStatus.class)
+                .ignore(Select.field(TaskStatus::getId))
+                .ignore(Select.field((TaskStatus::getCreatedAt)))
+                .create();
+
+        taskStatusForFilter = Instancio.of(TaskStatus.class)
                 .ignore(Select.field(TaskStatus::getId))
                 .ignore(Select.field((TaskStatus::getCreatedAt)))
                 .create();
@@ -99,6 +106,14 @@ public class TestTask {
                 .supply(Select.field(Task::getTaskLabel), () -> labels)
                 .supply(Select.field(Task::getAssignee), () -> user)
                 .supply(Select.field(Task::getTaskStatus), () -> taskStatus)
+                .create();
+
+        taskFilter = Instancio.of(Task.class)
+                .ignore(Select.field(Task::getId))
+                .ignore(Select.field(Task::getCreatedAt))
+                .supply(Select.field(Task::getTaskLabel), () -> labels)
+                .supply(Select.field(Task::getAssignee), () -> user)
+                .supply(Select.field(Task::getTaskStatus), () -> taskStatusForFilter)
                 .create();
 
         taskRepository.save(task);
@@ -135,7 +150,6 @@ public class TestTask {
 
     @Test
     public void testCreate() throws Exception {
-        taskRepository.deleteAll();
         Map<String, String> data = new HashMap<>();
         data.put("index", "12345");
         data.put("assignee_id", String.valueOf(user.getId()));
@@ -180,5 +194,21 @@ public class TestTask {
                 .andReturn();
 
         assertThat(taskRepository.existsById(task.getId())).isFalse();
+    }
+
+    @Test
+    public void testFilter() throws Exception {
+        Map<String, String> data = new HashMap<>();
+        data.put("assigneeId", String.valueOf(user.getId()));
+        data.put("status", taskStatus.getSlug());
+
+        MvcResult result = mockMvc.perform(get("/api/tasks").with(jwt())
+                .contentType(MediaType.TEXT_HTML).content(om.writeValueAsString(data)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String body = result.getResponse().getContentAsString();
+        assertThat(body).contains(task.getName());
+        assertThat(body).doesNotContain(taskFilter.getName());
     }
 }
