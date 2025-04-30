@@ -44,6 +44,7 @@ dependencies {
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
     runtimeOnly("com.h2database:h2")
     implementation("org.postgresql:postgresql:42.7.3")
+    implementation("io.sentry:sentry-opentelemetry-agent:8.11.1")
 
     implementation("net.datafaker:datafaker:2.0.2")
     implementation("org.instancio:instancio-junit:3.3.1")
