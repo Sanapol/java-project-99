@@ -1,5 +1,6 @@
 package hexlet.code.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -40,10 +41,10 @@ public class Task {
 
     private String description;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private TaskStatus taskStatus;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private User assignee;
 
     @ManyToMany
