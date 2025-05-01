@@ -23,6 +23,5 @@ jobs:
         uses: qltysh/qlty-action/coverage@main
         with:
           coverage-token: ${{secrets.QLTY_COVERAGE_TOKEN}}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           files: reports/coverage.xml
-      - SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-
