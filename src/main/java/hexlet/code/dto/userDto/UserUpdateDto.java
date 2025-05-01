@@ -14,4 +14,8 @@ public class UserUpdateDto {
 
     @NotBlank
     private JsonNullable<String> password;
+
+    private JsonNullable<String> firstName;
+
+    private JsonNullable<String> lastName;
 }
