@@ -47,7 +47,7 @@ public class Task {
     @ManyToOne(cascade = CascadeType.MERGE)
     private User assignee;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "task_label",
             joinColumns = @JoinColumn(name = "task_id"),
