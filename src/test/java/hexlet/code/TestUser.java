@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -122,10 +123,12 @@ public class TestUser {
     @Test
     public void testUpdate() throws Exception {
         Map<String, String> data = new HashMap<>();
+        SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor token = jwt().
+                jwt(builder -> builder.subject(user.getEmail()));
         data.put("email", "email@list.com");
 
         MvcResult result = mockWvc.perform(put("/api/users/" + user.getId())
-                        .contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsString(data)).with(jwt()))
+                        .contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsString(data)).with(token))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -135,7 +138,9 @@ public class TestUser {
 
     @Test
     public void testDelete() throws Exception {
-        ResultActions result = mockWvc.perform(delete("/api/users/" + user.getId()).with(jwt()))
+        SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor token = jwt().
+                jwt(builder -> builder.subject(user.getEmail()));
+        ResultActions result = mockWvc.perform(delete("/api/users/" + user.getId()).with(token))
                 .andExpect(status().isNoContent());
 
         assertThat(userRepository.existsById(user.getId())).isFalse();
