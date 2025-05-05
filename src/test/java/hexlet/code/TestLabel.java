@@ -6,7 +6,6 @@ import hexlet.code.model.Label;
 import hexlet.code.repository.LabelRepository;
 import org.instancio.Instancio;
 import org.instancio.Select;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +47,7 @@ public class TestLabel {
 
     @BeforeEach
     public void repositoryPrepare() {
+        labelRepository.deleteAll();
         label = Instancio.of(Label.class)
                 .ignore(Select.field(Label::getId))
                 .ignore(Select.field(Label::getCreatedAt))
@@ -55,11 +55,6 @@ public class TestLabel {
                 .create();
 
         labelRepository.save(label);
-    }
-
-    @AfterEach
-    public void clearAfter() {
-        labelRepository.deleteAll();
     }
 
     @Test
@@ -110,8 +105,11 @@ public class TestLabel {
                 .andExpect(status().isOk())
                 .andReturn();
 
+        Label resultLabel = labelRepository.findByName("Update name").get();
+
         String body = result.getResponse().getContentAsString();
         assertThatJson(body).and(l -> l.node("name").isEqualTo("Update name"));
+        assertThat(resultLabel.getName()).isEqualTo("Update name");
     }
 
     @Test

@@ -12,7 +12,6 @@ import hexlet.code.repository.UserRepository;
 import net.datafaker.Faker;
 import org.instancio.Instancio;
 import org.instancio.Select;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +69,11 @@ public class TestTask {
 
     @BeforeEach
     public void repositoryPrepare() {
+        taskRepository.deleteAll();
+        taskStatusRepository.deleteAll();
+        labelRepository.deleteAll();
+        userRepository.deleteAll();
+
         user = Instancio.of(User.class)
                 .ignore(Select.field(User::getId))
                 .ignore(Select.field(User::getCreatedAt))
@@ -117,13 +121,6 @@ public class TestTask {
                 .create();
 
         taskRepository.save(task);
-    }
-
-    @AfterEach
-    public void clearAfter() {
-        taskRepository.deleteAll();
-        taskStatusRepository.deleteAll();
-        userRepository.deleteAll();
     }
 
     @Test

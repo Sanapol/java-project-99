@@ -6,7 +6,6 @@ import hexlet.code.repository.UserRepository;
 import net.datafaker.Faker;
 import org.instancio.Instancio;
 import org.instancio.Select;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +50,7 @@ public class TestUser {
 
     @BeforeEach
     public void repositoryPrepare() {
+        userRepository.deleteAll();
         user = Instancio.of(User.class)
                 .ignore(Select.field(User::getId))
                 .ignore(Select.field(User::getCreatedAt))
@@ -58,11 +58,6 @@ public class TestUser {
                 .supply(Select.field(User::getEmail), () -> faker.internet().emailAddress())
                 .create();
         userRepository.save(user);
-    }
-
-    @AfterEach
-    public void clearAfter() {
-        userRepository.deleteAll();
     }
 
     @Test

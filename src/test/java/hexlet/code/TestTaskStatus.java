@@ -5,7 +5,6 @@ import hexlet.code.model.TaskStatus;
 import hexlet.code.repository.TaskStatusRepository;
 import org.instancio.Instancio;
 import org.instancio.Select;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,16 +43,12 @@ public class TestTaskStatus {
 
     @BeforeEach
     public void repositoryPrepare() {
+        taskStatusRepository.deleteAll();
         taskStatus = Instancio.of(TaskStatus.class)
                 .ignore(Select.field(TaskStatus::getId))
                 .ignore(Select.field((TaskStatus::getCreatedAt)))
                 .create();
         taskStatusRepository.save(taskStatus);
-    }
-
-    @AfterEach
-    public void clearAfter() {
-        taskStatusRepository.deleteAll();
     }
 
     @Test
