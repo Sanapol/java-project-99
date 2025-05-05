@@ -2,6 +2,7 @@ package hexlet.code;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.model.User;
+import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.UserRepository;
 import net.datafaker.Faker;
 import org.instancio.Instancio;
@@ -38,6 +39,9 @@ public class TestUser {
     private UserRepository userRepository;
 
     @Autowired
+    private TaskRepository taskRepository;
+
+    @Autowired
     private MockMvc mockWvc;
 
     @Autowired
@@ -50,6 +54,7 @@ public class TestUser {
 
     @BeforeEach
     public void repositoryPrepare() {
+        taskRepository.deleteAll();
         userRepository.deleteAll();
         user = Instancio.of(User.class)
                 .ignore(Select.field(User::getId))

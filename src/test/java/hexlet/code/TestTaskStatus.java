@@ -2,6 +2,7 @@ package hexlet.code;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.model.TaskStatus;
+import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import org.instancio.Instancio;
 import org.instancio.Select;
@@ -37,12 +38,16 @@ public class TestTaskStatus {
     private TaskStatusRepository taskStatusRepository;
 
     @Autowired
+    private TaskRepository taskRepository;
+
+    @Autowired
     private ObjectMapper om;
 
     private TaskStatus taskStatus;
 
     @BeforeEach
     public void repositoryPrepare() {
+        taskRepository.deleteAll();
         taskStatusRepository.deleteAll();
         taskStatus = Instancio.of(TaskStatus.class)
                 .ignore(Select.field(TaskStatus::getId))
