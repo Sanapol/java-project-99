@@ -72,6 +72,10 @@ public class TaskStatusController {
     public void delete(@PathVariable long id) {
         TaskStatus taskStatus = taskStatusRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Task Status with id " + id + " not found"));
-        taskStatusRepository.delete(taskStatus);
+        try {
+            taskStatusRepository.delete(taskStatus);
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot be completed, status connected with task");
+        }
     }
 }

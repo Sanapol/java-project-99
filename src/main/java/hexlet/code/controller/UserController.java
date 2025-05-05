@@ -10,6 +10,7 @@ import hexlet.code.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = {"http://localhost:8080"}, exposedHeaders = "X-Total-Count")
 @RequestMapping("/api/users")
-public final class UserController {
+public class UserController {
 
     @Autowired
     private UserRepository userRepository;
@@ -59,6 +60,7 @@ public final class UserController {
 
     @PutMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("@userRepository.findById(#id).get().getEmail() == authentication.name")
     public UserDto update(@PathVariable long id, @Valid @RequestBody UserUpdateDto dto) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("user with id " + id + " not found"));
@@ -69,6 +71,7 @@ public final class UserController {
 
     @DeleteMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("@userRepository.findById(#id).get().getEmail() == authentication.name")
     public void delete(@PathVariable long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("user with id " + id + " not found"));

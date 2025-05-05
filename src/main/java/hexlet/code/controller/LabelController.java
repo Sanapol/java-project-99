@@ -75,6 +75,10 @@ public class LabelController {
     public void delete(@PathVariable long id) {
         Label label = labelRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("label with id " + id + " not found"));
-        labelRepository.delete(label);
+        try {
+            labelRepository.delete(label);
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot be completed, label connected with task");
+        }
     }
 }
