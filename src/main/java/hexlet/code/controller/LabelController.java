@@ -4,6 +4,7 @@ import hexlet.code.dto.labelDto.LabelCreateDto;
 import hexlet.code.dto.labelDto.LabelDto;
 import hexlet.code.dto.labelDto.LabelUpdateDto;
 import hexlet.code.exeption.ResourceNotFoundException;
+import hexlet.code.exeption.UnprocessableEntity;
 import hexlet.code.mapper.LabelMapper;
 import hexlet.code.model.Label;
 import hexlet.code.repository.LabelRepository;
@@ -78,7 +79,7 @@ public class LabelController {
         try {
             labelRepository.delete(label);
         } catch (Exception e) {
-            throw new RuntimeException("Cannot be completed, label connected with task");
+            throw new UnprocessableEntity("Cannot be completed, label connected with task");
         }
     }
 }

@@ -4,6 +4,7 @@ import hexlet.code.dto.taskStatusDto.TaskStatusCreateDto;
 import hexlet.code.dto.taskStatusDto.TaskStatusDto;
 import hexlet.code.dto.taskStatusDto.TaskStatusUpdateDto;
 import hexlet.code.exeption.ResourceNotFoundException;
+import hexlet.code.exeption.UnprocessableEntity;
 import hexlet.code.mapper.TaskStatusMapper;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.repository.TaskStatusRepository;
@@ -75,7 +76,7 @@ public class TaskStatusController {
         try {
             taskStatusRepository.delete(taskStatus);
         } catch (Exception e) {
-            throw new RuntimeException("Cannot be completed, status connected with task");
+            throw new UnprocessableEntity("Cannot be completed, status connected with task");
         }
     }
 }
